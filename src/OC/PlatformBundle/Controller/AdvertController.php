@@ -8,6 +8,12 @@ use OC\PlatformBundle\Entity\Advert;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AdvertController extends Controller
 {
@@ -78,6 +84,29 @@ class AdvertController extends Controller
 
   public function addAction(Request $request)
   {
+    // On crée un objet Advert
+    $advert = new Advert();
+
+    // On crée le FormBuilder grâce au service form factory
+    $formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $advert);
+
+    // On ajoute les champs de l'entité que l'on veut à notre formulaire
+    $formBuilder
+      ->add('date',       DateType::class)
+      ->add('title',      Texttype::class)
+      ->add('content',    TextareaType::class)
+      ->add('author',     Texttype::class)
+      ->add('published',  CheckboxType::class)
+      ->add('save',       submitType::class)
+    ;
+
+    // Pour l'instant, pas de candidatures, catégories, etc., on les gérera plus tard
+
+    // À partir du formBuilder, on génère le formulaire
+    $form = $formBuilder->getForm();
+
+
+
     $em = $this->getDoctrine()->getManager();
 
     // On ne sait toujours pas gérer le formulaire, patience cela vient dans la prochaine partie !
@@ -88,7 +117,9 @@ class AdvertController extends Controller
       return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
     }
 
-    return $this->render('OCPlatformBundle:Advert:add.html.twig');
+    return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
+      'form' => $form->createView(),
+    ));
   }
 
   public function editAction($id, Request $request)
