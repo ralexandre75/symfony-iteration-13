@@ -112,6 +112,21 @@ class AdvertController extends Controller
     // On ne sait toujours pas gérer le formulaire, patience cela vient dans la prochaine partie !
 
     if ($request->isMethod('POST')) {
+
+      // On fait le lien Requête <-> Formulaire
+      // À partir de maintenant, la variable $advert contient les valeurs entrées dans le formulaire par le visiteur
+      $form->handleRequest($request);
+
+      // On vérifie que les valeurs entrées sont correctes
+      // (Nous verrons la validation des objets en détail dans le prochain chapitre)
+      if($form->isValid()){
+        // On enregistre notre objet $advert dans la base de données, par exemple
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($advert);
+        $em->flush();
+
+      }
+
       $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
 
       return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
