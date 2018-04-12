@@ -22,7 +22,9 @@
 	{{ form_errors(form) }}
 
 	{# Génération du label + error + widget pour un champ. #}
-	{{ form_row(form.date) }}
+  {% if form.date is defined %}
+	 {{ form_row(form.date) }}
+  {% endif %}
 
 	{# Génération manuelle et éclatée : #}
 	<div class="form-group">
@@ -41,50 +43,35 @@
 	{# Idem pour un autre champ. #}
 	<div class="form-group">
 		{{ form_label(form.content, "Contenu de l'annonce", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-		{{ form_errors(form.content) }}
+		{{ form_errors(form.title) }}
 		<div class="col-sm-10">
 			{{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
 		</div>
 	</div>
-	<div class="form-group">
-		<div class="col-sm-1"></div>
-		<div class="col-sm-10">
-			{{ form_row(form.author) }}
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-1"></div>
-		<div class="col-sm-10">
-			{{ form_row(form.image) }}
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-1"></div>
-		<div class="col-sm-10">
-			{{ form_row(form.categories) }}
-			<a href ="#" id="add_category" class="btn btn-default"> Ajouter une categorie </a>
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-2"></div>
-		<div class="col-sm-10">
-			{{ form_row(form.published) }}
-		</div>
-	</div>
+	
+	{{ form_row(form.author) }}
+
+  {% if form.published is defined %}
+    {{ form_row(form.published) }}
+  {% endif %}
+
+	{{ form_row(form.image) }}
+
+	{{ form_row(form.categories) }}
+
+  <a href ="#" id="add_category" class="btn btn-default"> Ajouter une categorie </a>
 
 
+  {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+  {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
 
-	{# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
-	{{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+  {# Génération automatique des champs pas encore écrits
+  Das cette exemple ce serait le champ CSRF (géré automatiquement pas symfony ! et tous les champs caché (type "hidden"). #}
+  {{ form_rest(form) }}
 
-	{# Génération automatique des champs pas encore écrits
-	Das cette exemple ce serait le champ CSRF (géré automatiquement pas symfony ! et tous les champs caché (type "hidden"). #}
-	{{ form_rest(form) }}
-
-	{#fermeture de la balise <form> du formulaire HTML #}
-	{{ form_end(form) }}
-</div>
-
+  {#fermeture de la balise <form> du formulaire HTML #}
+  {{ form_end(form) }}
+  </div>
 
 
 {# On charge la bibliothèque jQuery. Ici, je la prends depuis le CDN google
