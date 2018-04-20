@@ -114,7 +114,7 @@ class AdvertController extends Controller
       if($form->isValid()){
         // Ajouter cette ligne
         // C'est elle qui deplace l'image là où on veut stocker
-        $advert->getImage()->upload();
+        
 
         // On enregistre notre objet $advert dans la base de données, par exemple
         $em = $this->getDoctrine()->getManager();
