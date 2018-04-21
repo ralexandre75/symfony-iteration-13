@@ -147,16 +147,22 @@ class AdvertController extends Controller
       throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
     }
 
-    // Ici encore, il faudra mettre la gestion du formulaire
+    // la gestion du formulaire
+    $form = $this->get('form.factory')->create(AdvertEditType::class, $advert);
 
-    if ($request->isMethod('POST')) {
+
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+      // Inutile de persister ici, Doctrine connait déjà notre annonde
+      $em->flush();
+
       $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
 
       return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
     }
 
     return $this->render('OCPlatformBundle:Advert:edit.html.twig', array(
-      'advert' => $advert
+      'advert' => $advert,
+      'form'   => $form->createView(),
     ));
   }
 
